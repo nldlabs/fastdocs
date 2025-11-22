@@ -1,0 +1,14 @@
+{
+  "title": "nlddoc",
+  "description": "Zero-config markdown documentation viewer and static site generator",
+  "logo": "./logo.svg",
+  "search": true,
+  "outline": {
+    "enabled": true,
+    "depth": [
+      2,
+      3
+    ],
+    "label": "On this page"
+  }
+}

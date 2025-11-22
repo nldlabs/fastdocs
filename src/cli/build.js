@@ -50,11 +50,11 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
     }
   }
   
-  info(`Building documentation from: ${absoluteInputPath}`)
-  info(`Output directory: ${absoluteOutputPath}`)
-  
   // Load configuration
   const config = loadConfig(absoluteInputPath)
+  
+  info(`📚 ${config.title}`)
+  info(`Building static site...`)
   
   // Add base URL if provided
   if (options.base) {
@@ -62,13 +62,10 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
   }
   
   // Create temporary VitePress project (for build, copies files)
-  info('Creating temporary project...')
   const tempDir = createTempProjectForBuild(absoluteInputPath, config)
-  success(`Temporary project created`)
   
   try {
     // Install dependencies
-    info('Installing dependencies...')
     await new Promise((resolve, reject) => {
       const npm = spawn('npm', ['install'], {
         cwd: tempDir,
@@ -77,14 +74,11 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
       
       npm.on('close', (code) => {
         if (code === 0) resolve()
-        else reject(new Error(`npm install failed with code ${code}`))
+        else reject(new Error(`Setup failed`))
       })
     })
     
-    success('Dependencies installed')
-    
     // Run VitePress build
-    info('Building site...')
     
     await new Promise((resolve, reject) => {
       const vitepress = spawn('npx', ['vitepress', 'build'], {
@@ -107,7 +101,8 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
     const builtFiles = join(tempDir, '.vitepress/dist')
     cpSync(builtFiles, absoluteOutputPath, { recursive: true })
     
-    success(`Build complete! Output: ${absoluteOutputPath}`)
+    success(`✨ Build complete!`)
+    info(`📁 ${absoluteOutputPath}`)
     
   } catch (err) {
     error(`Build failed: ${err.message}`)

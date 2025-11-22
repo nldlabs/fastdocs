@@ -29,38 +29,32 @@ export async function serve(docsPath = '.', options = {}) {
     process.exit(1)
   }
   
-  info(`Starting documentation server for: ${absoluteDocsPath}`)
-  
   // Load configuration
   const config = loadConfig(absoluteDocsPath)
-  info(`Site title: ${config.title}`)
+  
+  info(`📚 ${config.title}`)
+  info(`Starting dev server...`)
   
   // Create temporary VitePress project
-  info('Creating temporary project...')
   const tempDir = createTempProject(absoluteDocsPath, config)
-  success(`Temporary project created at: ${tempDir}`)
   
   // Register cleanup handlers
   registerCleanupHandlers(tempDir)
   
   // Install dependencies in temp directory
-  info('Installing dependencies...')
   await new Promise((resolve, reject) => {
     const npm = spawn('npm', ['install'], {
       cwd: tempDir,
-      stdio: 'inherit'
+      stdio: 'pipe'  // Hide npm output
     })
     
     npm.on('close', (code) => {
       if (code === 0) resolve()
-      else reject(new Error(`npm install failed with code ${code}`))
+      else reject(new Error(`Setup failed`))
     })
   })
   
-  success('Dependencies installed')
-  
   // Start VitePress dev server
-  info(`Starting VitePress on port ${options.port || 5173}...`)
   
   const vitepressArgs = ['vitepress', 'dev']
   

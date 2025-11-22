@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/nldlabs/nlddoc/issues"
   },
-  "homepage": "https://github.com/nldlabs/nlddoc#readme",
+  "homepage": "https://nldlabs.github.io/nlddoc/",
   "author": "",
   "license": "MIT",
   "dependencies": {

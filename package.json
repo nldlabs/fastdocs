@@ -1,6 +1,6 @@
 {
   "name": "nlddoc",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Zero-config markdown documentation viewer and static site generator powered by VitePress",
   "type": "module",
   "bin": {

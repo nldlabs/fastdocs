@@ -66,11 +66,6 @@ export function generateSidebar(dir, basePath = '') {
         const { data } = matter(content)
         order = data.order ?? Infinity
         title = data.title
-        
-        // Debug logging
-        if (file === 'getting-started.md') {
-          console.log('[DEBUG] getting-started.md frontmatter:', { order, title, data })
-        }
       } catch (err) {
         // Ignore errors, use defaults
       }

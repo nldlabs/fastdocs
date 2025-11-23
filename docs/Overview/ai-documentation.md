@@ -362,7 +362,7 @@ docs/
 ## Resources
 
 - [nlddoc Guide](./index.md)
-- [Configuration Reference](./configuration.md)
-- [Custom Components](./custom-components.md)
-- [Frontmatter Guide](./Frontmatter.md)
+- [Configuration Reference](../Guide/configuration.md)
+- [Custom Components](../Guide/custom-components.md)
+- [Frontmatter Guide](../Guide/Frontmatter.md)
 - [Lucide Icons](https://lucide.dev/icons)

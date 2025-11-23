@@ -4,6 +4,7 @@ import { program } from 'commander'
 import { serve } from '../src/cli/serve.js'
 import { build } from '../src/cli/build.js'
 import { init } from '../src/cli/init.js'
+import { checkLinksCommand } from '../src/cli/check-links.js'
 
 program
   .name('nlddoc')
@@ -29,6 +30,12 @@ program
   .description('Build static site from documentation')
   .option('--base <path>', 'Base URL path for deployment', '/')
   .option('--clean', 'Clean output directory without confirmation')
+  .option('--skip-link-checking', 'Skip link validation (not recommended)')
   .action(build)
+
+program
+  .command('check-links [path]')
+  .description('Check for broken local links in documentation')
+  .action(checkLinksCommand)
 
 program.parse()

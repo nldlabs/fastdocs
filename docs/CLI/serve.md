@@ -122,6 +122,30 @@ Your docs directory stays clean - no `node_modules`, no build artifacts.
 ────────────────────────────────────────────────────────────
 ```
 
+## Link Checking
+
+The serve command automatically checks for broken links:
+
+- **On startup** - Validates all local markdown links
+- **After changes** - Rechecks when files are modified
+- **Shows warnings** - Displays broken links without stopping server
+
+If broken links are found, you'll see:
+
+```
+⚠ Warning: broken links detected
+────────────────────────────────────────────────────────────
+  ● guide/index.md:
+    → ./missing.md (line 42)
+────────────────────────────────────────────────────────────
+  Fix these links to ensure your documentation works correctly.
+  Note: Broken links will cause build errors.
+  Run nlddoc check-links for the full report.
+────────────────────────────────────────────────────────────
+```
+
+Fix broken links during development to avoid build failures.
+
 ## Hot Reload
 
 Changes to your markdown files are reflected instantly:
@@ -189,6 +213,7 @@ Then open the Network URL on your phone/tablet.
 
 ## Related
 
+- [nlddoc check-links](./check-links.md)
 - [nlddoc build](./build.md)
 - [Configuration](../Guide/configuration.md)
 - [Folder Structure](../Guide/folder-structure.md)

@@ -5,6 +5,7 @@ import { loadConfig } from './config.js'
 import { createTempProject, registerCleanupHandlers } from '../utils/tempProject.js'
 import { watchSidebarChanges } from '../utils/sidebarWatcher.js'
 import { info, success, error } from '../utils/logger.js'
+import { checkLinks } from '../utils/linkChecker.js'
 import pc from 'picocolors'
 
 export async function serve(docsPath = '.', options = {}) {
@@ -77,6 +78,38 @@ export async function serve(docsPath = '.', options = {}) {
   let hasShownTips = false
   let serverUrls = { local: null, network: null }
   
+  // Function to check and display broken links
+  const runLinkCheck = async () => {
+    try {
+      const brokenLinks = await checkLinks(absoluteDocsPath)
+      if (brokenLinks.size > 0) {
+        console.log(pc.yellow(pc.bold('⚠ Warning: broken links detected')))
+        console.log()
+        console.log(pc.dim('─'.repeat(60)))
+        console.log()
+        
+        for (const [file, links] of brokenLinks) {
+          console.log(`  ${pc.yellow('●')} ${pc.bold(file)}`)
+          for (const link of links) {
+            console.log(`    ${pc.dim('→')} ${pc.yellow(link.target)} ${pc.dim(`(line ${link.line})`)}`)
+          }
+          console.log()
+        }
+        
+        console.log(pc.dim('─'.repeat(60)))
+        console.log()
+        console.log(pc.dim('  Fix these links to ensure your documentation works correctly.'))
+        console.log(pc.dim('  ') + pc.yellow('Note:') + pc.dim(' Broken links will cause build errors.'))
+        console.log(pc.dim('  Run ') + pc.cyan('nlddoc check-links') + pc.dim(' for the full report.'))
+        console.log()
+        console.log(pc.dim('─'.repeat(60)))
+        console.log()
+      }
+    } catch (err) {
+      console.error(pc.red('Error checking links:'), err.message)
+    }
+  }
+  
   const startVitePress = () => {
     vitepress = spawn(vitepressBin, vitepressArgs, {
       cwd: tempDir,
@@ -132,6 +165,9 @@ export async function serve(docsPath = '.', options = {}) {
           console.log()
           console.log(pc.dim('─'.repeat(60)))        
           console.log()
+          
+          // Check for broken links after server starts
+          runLinkCheck()
         }
         
         // Suppress all VitePress stdout output (we've extracted what we need)
@@ -160,6 +196,8 @@ export async function serve(docsPath = '.', options = {}) {
       setTimeout(() => {
         isRestarting = false
         startVitePress()
+        // Re-run link check after restart
+        setTimeout(() => runLinkCheck(), 1000)
       }, 500)
     }
   })

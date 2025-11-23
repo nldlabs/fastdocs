@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import { loadConfig } from './config.js'
 import { createTempProjectForBuild, cleanupTempProject } from '../utils/tempProject.js'
 import { info, success, error } from '../utils/logger.js'
+import { checkLinks } from '../utils/linkChecker.js'
 import readline from 'readline'
 import pc from 'picocolors'
 
@@ -64,6 +65,49 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
   console.log()
   console.log(pc.dim('─'.repeat(60)))
   console.log()
+  
+  // Check for broken links before building (unless skipped)
+  if (!options.skipLinkChecking) {
+    console.log(pc.dim('🔍 Checking links...'))
+    console.log()
+    const brokenLinks = await checkLinks(absoluteInputPath)
+    
+    if (brokenLinks.size > 0) {
+      console.log(pc.red(pc.bold('✗ Build failed: broken links detected')))
+      console.log()
+      console.log(pc.dim('─'.repeat(60)))
+      console.log()
+      
+      for (const [file, links] of brokenLinks) {
+        console.log(`  ${pc.red('●')} ${pc.bold(file)}`)
+        for (const link of links) {
+          console.log(`    ${pc.dim('→')} ${pc.red(link.target)} ${pc.dim(`(line ${link.line})`)}`)
+        }
+        console.log()
+      }
+      
+      console.log(pc.dim('─'.repeat(60)))
+      console.log()
+      console.log(pc.dim('  Fix the broken links above and try again.'))
+      console.log(pc.dim('  You can also run ') + pc.cyan('nlddoc check-links') + pc.dim(' to see the full report.'))
+      console.log(pc.dim('  Or use ') + pc.cyan('--skip-link-checking') + pc.dim(' to build anyway (not recommended).'))
+      console.log()
+      console.log(pc.dim('─'.repeat(60)))
+      console.log()
+      
+      process.exit(1)
+    }
+    
+    console.log(pc.green('✓') + ' All links valid')
+    console.log()
+    console.log(pc.dim('─'.repeat(60)))
+    console.log()
+  } else {
+    console.log(pc.yellow('⚠ Skipping link checking'))
+    console.log()
+    console.log(pc.dim('─'.repeat(60)))
+    console.log()
+  }
   
   // Add base URL if provided
   if (options.base) {

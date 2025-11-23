@@ -45,6 +45,14 @@ Clean output directory without confirmation.
 - **Type:** `boolean`
 - **Default:** `false`
 
+### --skip-link-checking
+
+Skip link validation before building.
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Warning:** Not recommended - may result in broken links in deployed documentation
+
 ## Examples
 
 ### Build with Defaults
@@ -77,6 +85,16 @@ For deploying to `https://example.com/my-project/`.
 nlddoc build ./docs ./dist --clean
 ```
 
+### Skip Link Checking
+
+**Not recommended** - only use if link checker has a bug:
+
+```bash
+nlddoc build ./docs ./dist --skip-link-checking
+```
+
+This bypasses link validation and may result in broken links in your deployed documentation.
+
 Overwrites output without asking.
 
 ## How It Works
@@ -85,21 +103,29 @@ When you run `build`, nlddoc:
 
 1. **Validates** input directory exists and contains `.md` files
 2. **Prompts** if output directory exists (unless `--clean`)
-3. **Loads** configuration from `.nlddoc`
-4. **Creates** temporary VitePress project
-5. **Copies** markdown files to temp directory
-6. **Installs** dependencies
-7. **Builds** static site with VitePress
-8. **Copies** built files to output directory
-9. **Cleans** up temporary directory
+3. **Checks links** - validates all local markdown links
+4. **Fails** if broken links found (prevents broken deployments)
+5. **Loads** configuration from `.nlddoc`
+6. **Creates** temporary VitePress project
+7. **Copies** markdown files to temp directory
+8. **Installs** dependencies
+9. **Builds** static site with VitePress
+10. **Copies** built files to output directory
+11. **Cleans** up temporary directory
 
 ## Output
+
+### Successful Build
 
 ```
 📙 nlddoc build
 ────────────────────────────────────────────────────────────
 ● Loading /path/to/docs
 ● Output /path/to/dist
+────────────────────────────────────────────────────────────
+🔍 Checking links...
+
+✓ All links valid
 ────────────────────────────────────────────────────────────
 
 ✓ Build complete!
@@ -109,6 +135,31 @@ When you run `build`, nlddoc:
   Ready to deploy! Upload the output directory to any static host.
 ────────────────────────────────────────────────────────────
 ```
+
+### Build Failed (Broken Links)
+
+```
+📙 nlddoc build
+────────────────────────────────────────────────────────────
+● Loading /path/to/docs
+● Output /path/to/dist
+────────────────────────────────────────────────────────────
+🔍 Checking links...
+
+✗ Build failed: broken links detected
+────────────────────────────────────────────────────────────
+  ● guide/index.md
+    → ./missing.md (line 25)
+
+  ● api/reference.md
+    → ../config.md (line 10)
+────────────────────────────────────────────────────────────
+  Fix the broken links above and try again.
+  You can also run nlddoc check-links to see the full report.
+────────────────────────────────────────────────────────────
+```
+
+The build will not proceed if broken links are found.
 
 ## Base URL
 
@@ -284,6 +335,27 @@ Common causes:
 
 Check the error message for details.
 
+**Broken links:** The build automatically checks for broken internal links. If found, the build fails with details about which files have broken links. Fix the links or use `--skip-link-checking` to bypass (not recommended).
+
+### Link Checker False Positive
+
+If the link checker incorrectly reports a valid link as broken:
+
+1. **First, verify the link is actually valid**
+   - File exists at the path
+   - Path is correct (case-sensitive on Linux)
+   - File has `.md` extension
+
+2. **Report the bug**
+   - [Open an issue](https://github.com/nldlabs/nlddoc/issues) with the false positive
+
+3. **Temporary workaround**
+   ```bash
+   nlddoc build --skip-link-checking
+   ```
+   
+   This bypasses link validation entirely. Use with caution as it may allow broken links in your deployed docs.
+
 ### Output Not Updated
 
 Ensure you're overwriting the old build:
@@ -303,6 +375,7 @@ Typical build: 10-30 seconds for 50-100 pages.
 
 ## Related
 
+- [nlddoc check-links](./check-links.md)
 - [nlddoc serve](./serve.md)
 - [Deployment Guide](../Deployment/index.md)
 - [Configuration](../Guide/configuration.md)

@@ -16,21 +16,14 @@ const __dirname = dirname(__filename)
  * @param {Function} onRestart - Callback to restart VitePress server
  */
 export function watchSidebarChanges(docsPath, tempDir, onRestart) {
-  console.log(pc.dim(`[watcher] Starting to watch: ${docsPath}`))
-  console.log(pc.dim(`[watcher] Pattern: **/*.md, .nlddoc`))
-  
   const watcher = watch(docsPath, {
     ignoreInitial: true,
     ignored: ['**/node_modules/**', '**/.vitepress/**', '**/dist/**', '**/.git/**'],
     depth: 99 // Watch all subdirectories
   })
   
-  watcher.on('ready', () => {
-    console.log(pc.dim('[watcher] Ready and watching for changes'))
-  })
-  
   watcher.on('error', (err) => {
-    console.error(pc.red(`[watcher] Error: ${err.message}`))
+    console.error(pc.red(`Watcher error: ${err.message}`))
   })
   
   let restartTimeout
@@ -39,11 +32,8 @@ export function watchSidebarChanges(docsPath, tempDir, onRestart) {
   const regenerateConfig = (event, path) => {
     // Prevent concurrent regenerations
     if (isRegenerating) {
-      console.log(pc.dim(`[watcher] Skipping ${event} - ${path} (regeneration in progress)`))
       return
     }
-    
-    console.log(pc.cyan(`[watcher] Detected: ${event} - ${path}`))
     
     // Debounce to handle multiple rapid changes
     clearTimeout(restartTimeout)
@@ -51,7 +41,7 @@ export function watchSidebarChanges(docsPath, tempDir, onRestart) {
       isRegenerating = true
       
       console.log(pc.dim(`\n  File ${event}: ${path}`))
-      console.log(pc.dim('  Regenerating sidebar...\n'))
+      console.log(pc.dim('  Updating...'))
       
       // Reload config and regenerate VitePress config
       const config = loadConfig(docsPath)
@@ -68,7 +58,8 @@ export default generateVitePressConfig(userConfig, docsPath, true)
 `
       
       writeFileSync(configPath, configContent)
-      console.log(pc.dim('[watcher] Config regenerated, triggering restart...'))
+      
+      console.log(pc.green('  ✓ Changes reloaded\n'))
       
       // Trigger restart
       onRestart()

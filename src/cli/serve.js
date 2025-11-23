@@ -36,7 +36,7 @@ export async function serve(docsPath = '.', options = {}) {
   const config = loadConfig(absoluteDocsPath)
   
   console.log()
-  console.log(pc.cyan(pc.bold('❄️  FastDocs')))
+  console.log(pc.cyan(pc.bold('📖  Fast Docs')))
   console.log()
   
   // Create temporary VitePress project

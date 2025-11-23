@@ -5,7 +5,7 @@ order: 6
 
 # Troubleshooting
 
-Solutions to common issues when using FastDocs.
+Solutions to common issues when using Fast Docs.
 
 ## Server Issues
 

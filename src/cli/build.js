@@ -56,7 +56,7 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
   const config = loadConfig(absoluteInputPath)
   
   console.log()
-  console.log(pc.cyan(pc.bold('❄️  FastDocs build')))
+  console.log(pc.cyan(pc.bold('📖  Fast Docs build')))
   console.log()
   console.log(pc.dim('─'.repeat(60)))
   console.log()

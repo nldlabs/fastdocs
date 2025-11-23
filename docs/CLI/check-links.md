@@ -206,7 +206,7 @@ When running `fastdocs build`, the link checker runs automatically:
 **Example output:**
 
 ```
-❄️  Fastdocs build
+📖  Fastdocs build
 ────────────────────────────────────────────────────────────
 ● Loading /path/to/docs
 ● Output /path/to/dist

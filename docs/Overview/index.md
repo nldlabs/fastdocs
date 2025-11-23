@@ -5,6 +5,6 @@ order: 1
 
 # Overview
 
-New to FastDocs? Start here.
+New to Fast Docs? Start here.
 
 <SubPages />

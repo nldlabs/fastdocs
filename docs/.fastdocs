@@ -1,15 +1,15 @@
 {
-  "title": "FastDocs",
+  "title": "Fast Docs",
   "description": "Zero-config markdown documentation viewer and static site generator",
   "logo": {
     "type": "lucide",
     "icon": "book-open",
-    "color": "#00c951"
+    "color": "#62d144"
   },
   "favicon": {
     "type": "lucide",
     "icon": "book-open",
-    "color": "#00c951"
+    "color": "#62d144"
   },
   "search": true,
   "outline": {

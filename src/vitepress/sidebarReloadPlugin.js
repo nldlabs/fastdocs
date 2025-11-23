@@ -10,7 +10,7 @@ export default function sidebarReloadPlugin(docsPath) {
   return {
     name: 'vitepress-sidebar-reload',
     configureServer(server) {
-      console.log(`[FastDocs] Watching for changes in: ${docsPath}`)
+      console.log(`[Fast Docs] Watching for changes in: ${docsPath}`)
       
       const watcher = watch(['**/*.md', '.fastdocs'], {
         cwd: docsPath,
@@ -19,7 +19,7 @@ export default function sidebarReloadPlugin(docsPath) {
       })
 
       const reloadSidebar = (event, path) => {
-        console.log(`[FastDocs] File ${event}: ${path} - Regenerating sidebar...`)
+        console.log(`[Fast Docs] File ${event}: ${path} - Regenerating sidebar...`)
         
         // Regenerate sidebar
         const newSidebar = generateSidebar(docsPath)
@@ -28,7 +28,7 @@ export default function sidebarReloadPlugin(docsPath) {
         const vitepressConfig = server.config.vitepress
         if (vitepressConfig?.site?.themeConfig) {
           vitepressConfig.site.themeConfig.sidebar = newSidebar
-          console.log('[FastDocs] Sidebar updated, triggering reload...')
+          console.log('[Fast Docs] Sidebar updated, triggering reload...')
         }
         
         // Force a full page reload

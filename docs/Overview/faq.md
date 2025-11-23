@@ -5,15 +5,15 @@ order: 5
 
 # FAQ
 
-Common questions about FastDocs.
+Common questions about Fast Docs.
 
 ## General
 
-### What is FastDocs?
+### What is Fast Docs?
 
-FastDocs is a zero-configuration tool for viewing and building markdown documentation. It wraps VitePress to provide an ultra-simple experience with no setup required.
+Fast Docs is a zero-configuration tool for viewing and building markdown documentation. It wraps VitePress to provide an ultra-simple experience with no setup required.
 
-### Why use FastDocs instead of VitePress directly?
+### Why use Fast Docs instead of VitePress directly?
 
 - **No setup** - Works instantly with `npx`
 - **Zero config** - No `.vitepress` folder or config files needed

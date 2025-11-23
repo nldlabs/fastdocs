@@ -5,7 +5,7 @@ order: 1
 
 # Getting Started
 
-This guide will walk you through using FastDocs for the first time. No prior experience needed.
+This guide will walk you through using Fast Docs for the first time. No prior experience needed.
 
 ## What You'll Need
 

@@ -10,8 +10,16 @@ export function loadConfig(docsPath) {
   const defaults = {
     title: basename(docsPath),
     description: 'Documentation',
-    logo: null,
-    favicon: null,
+    logo: {
+      type: "lucide",
+      icon: "book-open",
+      color: "#62d144"
+    },
+    favicon: {
+      type: "lucide",
+      icon: "book-open",
+      color: "#62d144"
+    },
     search: true,
     outline: {
       enabled: true,

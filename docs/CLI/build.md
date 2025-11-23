@@ -118,7 +118,7 @@ When you run `build`, fastdocs:
 ### Successful Build
 
 ```
-❄️  Fastdocs build
+📖  Fastdocs build
 ────────────────────────────────────────────────────────────
 ● Loading /path/to/docs
 ● Output /path/to/dist
@@ -139,7 +139,7 @@ When you run `build`, fastdocs:
 ### Build Failed (Broken Links)
 
 ```
-❄️  Fastdocs build
+📖  Fastdocs build
 ────────────────────────────────────────────────────────────
 ● Loading /path/to/docs
 ● Output /path/to/dist

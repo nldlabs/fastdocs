@@ -1,4 +1,4 @@
-# FastDocs
+# Fast Docs
 
 An ultralight, zero-config markdown documentation viewer and static site generator.
 

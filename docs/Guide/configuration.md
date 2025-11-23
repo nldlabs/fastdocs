@@ -5,7 +5,7 @@ order: 3
 
 # Customizing Your Site
 
-FastDocs works great without any setup. But if you want to customize things like the title or logo, here's how.
+Fast Docs works great without any setup. But if you want to customize things like the title or logo, here's how.
 
 ## Creating a Settings File
 

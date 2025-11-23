@@ -5,7 +5,7 @@ order: 4
 
 # Using AI to Generate Documentation
 
-AI assistants like GitHub Copilot can help you create and maintain documentation for FastDocs. Here's how to set them up effectively.
+AI assistants like GitHub Copilot can help you create and maintain documentation for Fast Docs. Here's how to set them up effectively.
 
 ## Copilot Instructions File
 

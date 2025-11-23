@@ -7,15 +7,15 @@ import readline from 'readline'
 const DEFAULT_CONFIG = {
   title: "My Documentation",
   description: "Documentation for my project",
-  "logo": {
-    "type": "lucide",
-    "icon": "book-open",
-    "color": "#00c951"
+  logo: {
+    type: "lucide",
+    icon: "book-open",
+    color: "#62d144"
   },
-  "favicon": {
-    "type": "lucide",
-    "icon": "book-open",
-    "color": "#00c951"
+  favicon: {
+    type: "lucide",
+    icon: "book-open",
+    color: "#62d144"
   },
   search: true,
   outline: {
@@ -51,7 +51,7 @@ export async function init(targetPath = '.', options = {}) {
   }
   
   console.log()
-  console.log(pc.cyan(pc.bold('❄️  FastDocs init')))
+  console.log(pc.cyan(pc.bold('📖  Fast Docs init')))
   console.log()
   console.log(pc.dim('─'.repeat(60)))
   console.log()

@@ -3,7 +3,7 @@ title: Docs
 order: 1
 ---
 
-# FastDocs
+# Fast Docs
 
 Turn a folder of markdown files into a searchable documentation website. No setup, no config files, just write.
 

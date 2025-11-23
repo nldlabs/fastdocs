@@ -1,5 +1,5 @@
 ---
-title: Home
+title: Docs
 order: 1
 ---
 

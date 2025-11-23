@@ -7,7 +7,16 @@ import readline from 'readline'
 const DEFAULT_CONFIG = {
   title: "My Documentation",
   description: "Documentation for my project",
-  logo: null,
+  logo: {
+    type: "lucide",
+    icon: "snowflake",
+    color: "#fd9a00"
+  },
+  favicon: {
+    type: "lucide",
+    icon: "snowflake",
+    color: "#fd9a00"
+  },
   search: true,
   outline: {
     enabled: true,
@@ -62,7 +71,7 @@ export async function init(targetPath = '.', options = {}) {
     console.log()
     console.log(pc.dim('  Edit .nlddoc to customize:'))
     console.log(pc.dim('  • Site title and description'))
-    console.log(pc.dim('  • Logo and branding'))
+    console.log(pc.dim('  • Logo and favicon (file or Lucide icon)'))
     console.log(pc.dim('  • Search and outline settings'))
     console.log()
     console.log(pc.dim('─'.repeat(60)))

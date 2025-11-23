@@ -11,6 +11,7 @@ export function loadConfig(docsPath) {
     title: basename(docsPath),
     description: 'Documentation',
     logo: null,
+    favicon: null,
     search: true,
     outline: {
       enabled: true,

@@ -1,7 +1,8 @@
 {
   "title": "nlddoc",
   "description": "Zero-config markdown documentation viewer and static site generator",
-  "logo": "./logo.svg",
+  "logo": "lucide:book-open",
+  "favicon": "lucide:book-open",
   "search": true,
   "outline": {
     "enabled": true,

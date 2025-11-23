@@ -51,7 +51,8 @@ export default generateVitePressConfig(userConfig, docsPath, true)
       '@vueuse/core': '^11.3.0',
       '@vueuse/integrations': '^11.3.0',
       'mark.js': '^8.11.1',
-      'minisearch': '^7.1.0'
+      'minisearch': '^7.1.0',
+      'lucide-vue-next': '^0.468.0'
     }
   }
   
@@ -116,7 +117,8 @@ export default generateVitePressConfig(userConfig, docsPath, false)
       '@vueuse/core': '^11.3.0',
       '@vueuse/integrations': '^11.3.0',
       'mark.js': '^8.11.1',
-      'minisearch': '^7.1.0'
+      'minisearch': '^7.1.0',
+      'lucide-vue-next': '^0.468.0'
     }
   }
   

@@ -22,6 +22,7 @@ This creates a file called `.nlddoc` with these settings:
   "title": "My Documentation",
   "description": "Documentation for my project",
   "logo": null,
+  "favicon": null,
   "search": true,
   "outline": {
     "enabled": true,
@@ -57,6 +58,45 @@ This helps with Google search results.
 
 ### Add a Logo
 
+You have several options for adding a logo:
+
+**Option 1: Use a Lucide Icon (Easiest)**
+
+Simple icon-only:
+
+```json
+{
+  "logo": "lucide:book-open"
+}
+```
+
+Icon with custom color:
+
+```json
+{
+  "logo": {
+    "type": "lucide",
+    "icon": "zap",
+    "color": "#fbbf24"
+  }
+}
+```
+
+Icon with text and color:
+
+```json
+{
+  "logo": {
+    "type": "lucide",
+    "icon": "rocket",
+    "text": "My Docs",
+    "color": "#4ecdc4"
+  }
+}
+```
+
+**Option 2: Use an Image File**
+
 1. Put your logo file (like `logo.png`) in your docs folder
 2. Update the settings:
 
@@ -66,7 +106,39 @@ This helps with Google search results.
 }
 ```
 
-Your logo appears in the top-left corner.
+Your logo appears in the top-left corner. For a complete list of available icons, see the [Icons Guide](./icons.md).
+
+### Add a Favicon
+
+Set a favicon (the small icon in browser tabs):
+
+**Using a Lucide icon:**
+
+```json
+{
+  "favicon": "lucide:book-open"
+}
+```
+
+With custom color:
+
+```json
+{
+  "favicon": {
+    "type": "lucide",
+    "icon": "bookmark",
+    "color": "#8b5cf6"
+  }
+}
+```
+
+**Using an image file:**
+
+```json
+{
+  "favicon": "./favicon.ico"
+}
+```
 
 ### Turn Off Search
 
@@ -94,7 +166,16 @@ The table of contents is that list of headings on the right side.
 {
   "title": "Family Recipes",
   "description": "Grandma's secret recipes and more",
-  "logo": "./cookbook.png",
+  "logo": {
+    "type": "lucide",
+    "icon": "chef-hat",
+    "color": "#f59e0b"
+  },
+  "favicon": {
+    "type": "lucide",
+    "icon": "chef-hat",
+    "color": "#f59e0b"
+  },
   "search": true,
   "outline": {
     "enabled": true,
@@ -110,11 +191,28 @@ The table of contents is that list of headings on the right side.
 
 You don't need a settings file to start. Only create one when you want to customize something.
 
+### Icon vs Image Files
+
+**Use Lucide icons when:**
+- You want something quick and easy
+- You need perfect scaling at any size
+- You want to match your brand color
+
+**Use image files when:**
+- You have a custom logo design
+- You need a specific graphic or wordmark
+
 ### Logo Guidelines
 
+**For image files:**
 - PNG, JPG, or SVG files work
 - Keep it small (around 40 pixels tall)
 - Transparent background looks best
+
+**For icons:**
+- Browse [lucide.dev/icons](https://lucide.dev/icons) for options
+- Use hex colors like `#3b82f6` for custom colors
+- Popular choices: `book-open`, `code`, `rocket`, `zap`
 
 ### Check Your Commas
 

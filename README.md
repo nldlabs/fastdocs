@@ -32,6 +32,7 @@ npx nlddoc init ./docs
 - 🔍 **Built-in Search** - Full-text search out of the box
 - 📖 **Table of Contents** - Automatic TOC from headings
 - 🎨 **Custom Components** - SubPages and FullContents components
+- 🎯 **Icon Support** - Use Lucide icons for logo and favicon
 - ⚡ **Hot Reload** - Instant updates during development
 - 🎯 **Frontmatter Support** - Optional YAML frontmatter for ordering and metadata
 - 🏗️ **Static Site Generation** - Deploy anywhere static hosting works
@@ -162,7 +163,8 @@ nlddoc init
 {
   "title": "My Documentation",
   "description": "Comprehensive project documentation",
-  "logo": "/logo.svg",
+  "logo": "lucide:book-open",
+  "favicon": "lucide:book-open",
   "search": true,
   "outline": {
     "enabled": true,
@@ -178,7 +180,8 @@ nlddoc init
 |--------|------|---------|-------------|
 | `title` | string | Folder name | Site title |
 | `description` | string | "Documentation" | Site description |
-| `logo` | string | null | Path to logo file |
+| `logo` | string/object | null | Path to logo file or Lucide icon (e.g., "lucide:book-open", or `{"type": "lucide", "icon": "book-open", "color": "#3b82f6"}`) |
+| `favicon` | string/object | null | Path to favicon or Lucide icon with optional color |
 | `search` | boolean | true | Enable search |
 | `outline.enabled` | boolean | true | Show table of contents |
 | `outline.depth` | array | [2, 3] | Heading levels to show |

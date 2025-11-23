@@ -19,7 +19,14 @@
     "static-site",
     "viewer",
     "no-config",
-    "zero-config"
+    "zero-config",
+    "nldlabs",
+    "nldlabs.cloud",
+    "fastdocs", 
+    "docs",
+    "ai-docs",
+    "ai",
+    "nld"
   ],
   "repository": {
     "type": "git",

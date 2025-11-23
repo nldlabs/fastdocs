@@ -1,6 +1,6 @@
 {
   "name": "fastdocs",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Zero-config markdown documentation viewer and static site generator powered by VitePress",
   "type": "module",
   "bin": {

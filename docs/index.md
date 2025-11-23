@@ -51,6 +51,8 @@ Think of it like `python -m http.server` for documentation. Quick, simple, gets 
 
 **Actually fast** - VitePress is fast. This inherits that.
 
+**AI-ready** - Works great with GitHub Copilot and other AI assistants. [Learn how to use AI to generate docs →](./Guide/ai-documentation.md)
+
 ## When to Use It
 
 Good for:

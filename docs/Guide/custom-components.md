@@ -106,7 +106,7 @@ Get started quickly with our comprehensive guides.
 
 ## Need Help?
 
-Check our [FAQ](./faq) or open an issue.
+Check our [FAQ](../Overview/faq.md) or open an issue.
 ```
 
 ### Section Overviews

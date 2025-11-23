@@ -274,6 +274,6 @@ Not set up yet, but contributions and GitHub stars help! ⭐
 
 ## Still Have Questions?
 
-- Check the [Guide](./Guide/index.md)
-- Read [CLI Reference](./CLI/index.md)
+- Check the [Guide](../Guide/index.md)
+- Read [CLI Reference](../CLI/index.md)
 - Open an [issue](https://github.com/nldlabs/nlddoc/issues)

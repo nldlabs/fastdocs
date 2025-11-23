@@ -136,7 +136,7 @@ Browse icons at [lucide.dev/icons](https://lucide.dev/icons).
 }
 ```
 
-See the [Configuration Guide](./Guide/configuration.md) for all options.
+See the [Configuration Guide](../Guide/configuration.md) for all options.
 
 ## Organizing Your Docs
 
@@ -197,9 +197,9 @@ The `<SubPages />` component shows links to child pages.
 
 Now that you've got the basics:
 
-- Read the [Configuration Guide](./Guide/configuration.md) to customize your site
-- Learn about [Frontmatter](./Guide/Frontmatter.md) for page metadata
-- Check out [Deployment](./Deployment/index.md) to publish your docs
+- Read the [Configuration Guide](../Guide/configuration.md) to customize your site
+- Learn about [Frontmatter](../Guide/Frontmatter.md) for page metadata
+- Check out [Deployment](../Deployment/index.md) to publish your docs
 
 Or just start writing markdown and let nlddoc handle the rest.
 
@@ -230,4 +230,4 @@ npx nlddoc serve ./docs --port 3000
 npx nlddoc build ./docs ./output --base /my-project/
 ```
 
-Need help? Check the [FAQ](./faq.md) or [CLI Reference](./CLI/index.md).
+Need help? Check the [FAQ](./faq.md) or [CLI Reference](../CLI/index.md).

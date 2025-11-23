@@ -70,7 +70,7 @@ nlddoc is for documentation. It does that one thing well.
 
 ## Get Started
 
-[Jump to Getting Started →](./getting-started.md)
+[Jump to Getting Started →](./Overview/getting-started.md)
 
 Or explore the full docs:
 

@@ -65,8 +65,20 @@ The command creates a `.fastdocs` file with these defaults:
 {
   "title": "My Documentation",
   "description": "Documentation for my project",
-  "logo": null,
+  "logo": {
+    "type": "lucide",
+    "icon": "book-open",
+    "color": "#62d144"
+  },
+  "favicon": {
+    "type": "lucide",
+    "icon": "book-open",
+    "color": "#62d144"
+  },
   "search": true,
+  "sidebar": {
+    "collapseFolders": false
+  },
   "outline": {
     "enabled": true,
     "depth": [2, 3],

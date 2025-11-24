@@ -18,6 +18,9 @@ const DEFAULT_CONFIG = {
     color: "#62d144"
   },
   search: true,
+  sidebar: {
+    collapseFolders: false
+  },
   outline: {
     enabled: true,
     depth: [2, 3],

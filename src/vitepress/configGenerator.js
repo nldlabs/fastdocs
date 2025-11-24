@@ -122,7 +122,7 @@ export function generateVitePressConfig(userConfig, docsPath, useSrcDir = true) 
       nav: [
         { text: 'Docs', link: '/' }
       ],
-      sidebar: generateSidebar(docsPath),
+      sidebar: generateSidebar(docsPath, '', userConfig.sidebar?.collapseFolders ?? false),
       outline: userConfig.outline.enabled ? {
         level: userConfig.outline.depth,
         label: userConfig.outline.label

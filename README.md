@@ -166,6 +166,9 @@ fastdocs init
   "logo": "lucide:book-open",
   "favicon": "lucide:book-open",
   "search": true,
+  "sidebar": {
+    "collapseFolders": false
+  },
   "outline": {
     "enabled": true,
     "depth": [2, 3],
@@ -183,6 +186,7 @@ fastdocs init
 | `logo` | string/object | null | Path to logo file or Lucide icon (e.g., "lucide:book-open", or `{"type": "lucide", "icon": "book-open", "color": "#3b82f6"}`) |
 | `favicon` | string/object | null | Path to favicon or Lucide icon with optional color |
 | `search` | boolean | true | Enable search |
+| `sidebar.collapseFolders` | boolean | false | Collapse sidebar folders by default |
 | `outline.enabled` | boolean | true | Show table of contents |
 | `outline.depth` | array | [2, 3] | Heading levels to show |
 | `outline.label` | string | "On this page" | TOC heading |
@@ -208,6 +212,7 @@ Your content here...
 - `title` - Override page title in navigation
 - `order` - Numeric sort order (lower numbers appear first)
 - `description` - Page description for SEO
+- `collapsed` - (index.md only) Override sidebar folder collapse state
 
 ## Custom Components
 

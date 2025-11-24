@@ -1,6 +1,7 @@
 ---
 title: Guides
 order: 3
+collapsed: false
 ---
 
 # Getting Started

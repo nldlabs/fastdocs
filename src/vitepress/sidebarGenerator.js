@@ -3,34 +3,13 @@ import { join, parse } from 'path'
 import matter from 'gray-matter'
 
 /**
- * Truncate long titles for sidebar display
- * @param {string} title - Original title
- * @param {number} maxLength - Maximum length before truncation
- * @returns {string} Truncated title
- */
-function truncateTitle(title, maxLength = 27) {
-  if (title.length <= maxLength) return title
-  
-  // Try to truncate at a word boundary
-  const truncated = title.slice(0, maxLength)
-  const lastSpace = truncated.lastIndexOf(' ')
-  
-  if (lastSpace > maxLength * 0.7) {
-    // If we can cut at a space without losing too much, do it
-    return truncated.slice(0, lastSpace) + '...'
-  }
-  
-  // Otherwise hard truncate
-  return truncated + '...'
-}
-
-/**
  * Generate VitePress sidebar structure from a directory of markdown files
  * @param {string} dir - Absolute path to directory to scan
  * @param {string} basePath - Relative path for building links
+ * @param {boolean} collapseFolders - Whether sidebar folders should be collapsed by default
  * @returns {Array} VitePress sidebar items
  */
-export function generateSidebar(dir, basePath = '') {
+export function generateSidebar(dir, basePath = '', collapseFolders = false) {
   const items = []
   const files = readdirSync(dir).filter(name => 
     // Exclude build/dependency directories
@@ -44,7 +23,7 @@ export function generateSidebar(dir, basePath = '') {
     const content = readFileSync(indexPath, 'utf8')
     const { data } = matter(content)
     indexData = {
-      title: truncateTitle(data.title ?? (basePath ? parse(basePath).name : 'Home')),
+      title: data.title ?? (basePath ? parse(basePath).name : 'Home'),
       order: data.order ?? Infinity
     }
   } catch (err) {
@@ -61,15 +40,16 @@ export function generateSidebar(dir, basePath = '') {
       // Check if directory has an index.md and read its frontmatter
       let order = Infinity
       let title = file
+      let collapsed = null  // null means use global default
       try {
         const indexPath = join(fullPath, 'index.md')
         const content = readFileSync(indexPath, 'utf8')
         const { data } = matter(content)
         order = data.order ?? Infinity
-        title = truncateTitle(data.title ?? file)
+        title = data.title ?? file
+        collapsed = data.collapsed ?? null
       } catch (err) {
         // No index.md or error reading it, use defaults
-        title = truncateTitle(file)
       }
       
       return {
@@ -78,7 +58,8 @@ export function generateSidebar(dir, basePath = '') {
         title,
         fullPath,
         relativePath,
-        order
+        order,
+        collapsed
       }
     } else if (file.endsWith('.md') && file !== 'index.md') {
       // Read frontmatter for order and title
@@ -100,9 +81,6 @@ export function generateSidebar(dir, basePath = '') {
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ')
       }
-      
-      // Truncate long titles
-      title = truncateTitle(title)
       
       return {
         type: 'file',
@@ -134,15 +112,18 @@ export function generateSidebar(dir, basePath = '') {
   // Build sidebar items
   for (const entry of entries) {
     if (entry.type === 'dir') {
-      const childItems = generateSidebar(entry.fullPath, entry.relativePath)
+      const childItems = generateSidebar(entry.fullPath, entry.relativePath, collapseFolders)
       if (childItems.length > 0) {
         // If directory has an index.md, make the folder itself clickable
         const hasIndex = readdirSync(entry.fullPath).includes('index.md')
         
+        // Use frontmatter collapsed if specified, otherwise use global default
+        const isCollapsed = entry.collapsed !== null ? entry.collapsed : collapseFolders
+        
         items.push({
           text: entry.title,
           link: hasIndex ? `/${entry.relativePath}/` : undefined,
-          collapsed: false,
+          collapsed: isCollapsed,
           items: childItems
         })
       }

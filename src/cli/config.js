@@ -21,6 +21,9 @@ export function loadConfig(docsPath) {
       color: "#62d144"
     },
     search: true,
+    sidebar: {
+      collapseFolders: false
+    },
     outline: {
       enabled: true,
       depth: [2, 3],
@@ -39,6 +42,10 @@ export function loadConfig(docsPath) {
       return {
         ...defaults,
         ...userConfig,
+        sidebar: {
+          ...defaults.sidebar,
+          ...(userConfig.sidebar || {})
+        },
         outline: {
           ...defaults.outline,
           ...(userConfig.outline || {})

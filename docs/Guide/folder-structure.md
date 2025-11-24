@@ -64,6 +64,25 @@ Recipes/
 
 Now when someone clicks "Recipes" in the menu, they see the `index.md` page.
 
+### Controlling Folder Collapse State
+
+You can control whether a specific folder is collapsed or expanded in the sidebar using frontmatter in its `index.md`:
+
+```markdown
+---
+title: Advanced Topics
+collapsed: true
+---
+
+# Advanced Topics
+
+These topics are for experienced users.
+
+<SubPages />
+```
+
+This overrides the global `sidebar.collapseFolders` setting for just this folder.
+
 ## Controlling the Order
 
 By default, everything is sorted alphabetically. Want a specific order?

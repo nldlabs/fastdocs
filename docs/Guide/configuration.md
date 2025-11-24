@@ -24,6 +24,9 @@ This creates a file called `.fastdocs` with these settings:
   "logo": null,
   "favicon": null,
   "search": true,
+  "sidebar": {
+    "collapsed": false
+  },
   "outline": {
     "enabled": true,
     "depth": [2, 3],
@@ -148,6 +151,20 @@ With custom color:
 }
 ```
 
+### Collapse Sidebar Folders
+
+By default, all folders in the sidebar are expanded. To collapse them:
+
+```json
+{
+  "sidebar": {
+    "collapseFolders": true
+  }
+}
+```
+
+Users can still click to expand folders they want to see.
+
 ### Hide the Table of Contents
 
 The table of contents is that list of headings on the right side.
@@ -177,6 +194,9 @@ The table of contents is that list of headings on the right side.
     "color": "#f59e0b"
   },
   "search": true,
+  "sidebar": {
+    "collapseFolders": false
+  },
   "outline": {
     "enabled": true,
     "depth": [2, 3],

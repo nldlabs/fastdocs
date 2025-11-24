@@ -82,6 +82,26 @@ Used in:
 - Search engine results
 - Social media previews
 
+### collapsed
+
+**For `index.md` files only** - Control whether the folder is collapsed in the sidebar.
+
+```markdown
+---
+title: Advanced Topics
+collapsed: true
+---
+
+# Advanced Topics
+```
+
+- `collapsed: true` - Folder is collapsed by default
+- `collapsed: false` - Folder is expanded by default
+- Overrides the global `sidebar.collapseFolders` setting for this specific folder
+- Only works in `index.md` files (ignored in other markdown files)
+
+**Use case:** You might want most folders expanded (`sidebar.collapseFolders: false`) but collapse a large "API Reference" section by default.
+
 ## Complete Example
 
 ```markdown

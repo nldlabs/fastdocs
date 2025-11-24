@@ -3,6 +3,28 @@ import { join, parse } from 'path'
 import matter from 'gray-matter'
 
 /**
+ * Truncate long titles for sidebar display
+ * @param {string} title - Original title
+ * @param {number} maxLength - Maximum length before truncation
+ * @returns {string} Truncated title
+ */
+function truncateTitle(title, maxLength = 27) {
+  if (title.length <= maxLength) return title
+  
+  // Try to truncate at a word boundary
+  const truncated = title.slice(0, maxLength)
+  const lastSpace = truncated.lastIndexOf(' ')
+  
+  if (lastSpace > maxLength * 0.7) {
+    // If we can cut at a space without losing too much, do it
+    return truncated.slice(0, lastSpace) + '...'
+  }
+  
+  // Otherwise hard truncate
+  return truncated + '...'
+}
+
+/**
  * Generate VitePress sidebar structure from a directory of markdown files
  * @param {string} dir - Absolute path to directory to scan
  * @param {string} basePath - Relative path for building links
@@ -22,7 +44,7 @@ export function generateSidebar(dir, basePath = '') {
     const content = readFileSync(indexPath, 'utf8')
     const { data } = matter(content)
     indexData = {
-      title: data.title ?? (basePath ? parse(basePath).name : 'Home'),
+      title: truncateTitle(data.title ?? (basePath ? parse(basePath).name : 'Home')),
       order: data.order ?? Infinity
     }
   } catch (err) {
@@ -44,9 +66,10 @@ export function generateSidebar(dir, basePath = '') {
         const content = readFileSync(indexPath, 'utf8')
         const { data } = matter(content)
         order = data.order ?? Infinity
-        title = data.title ?? file
+        title = truncateTitle(data.title ?? file)
       } catch (err) {
         // No index.md or error reading it, use defaults
+        title = truncateTitle(file)
       }
       
       return {
@@ -77,6 +100,9 @@ export function generateSidebar(dir, basePath = '') {
           .map(word => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ')
       }
+      
+      // Truncate long titles
+      title = truncateTitle(title)
       
       return {
         type: 'file',

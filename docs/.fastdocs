@@ -8,7 +8,7 @@
   },
   "favicon": {
     "type": "lucide",
-    "icon": "book-open",
+    "icon": "book",
     "color": "#62d144"
   },
   "search": true,

@@ -44,9 +44,19 @@
     "gray-matter": "^4.0.3",
     "lucide-vue-next": "^0.468.0",
     "mermaid": "^11.4.0",
-    "vitepress": "^1.6.4"
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.13",
+    "@vue/devtools-api": "^7.6.4",
+    "@vueuse/core": "^11.3.0",
+    "@vueuse/integrations": "^11.3.0",
+    "mark.js": "^8.11.1",
+    "minisearch": "^7.1.0",
+    "picocolors": "^1.1.1"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test"
   }
 }

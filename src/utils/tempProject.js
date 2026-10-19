@@ -1,6 +1,8 @@
 import { mkdirSync, writeFileSync, rmSync, cpSync, existsSync, readdirSync, statSync } from 'fs'
 import { tmpdir } from 'os'
 import { join } from 'path'
+import { isExcludedPath } from './docsFiles.js'
+import { linkRuntimeDependencies } from './runtime.js'
 import { randomBytes } from 'crypto'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname } from 'path'
@@ -69,65 +71,55 @@ ${component}
 export function createTempProject(docsPath, config) {
   const hash = randomBytes(8).toString('hex')
   const tempDir = join(tmpdir(), `fastdocs-${hash}`)
-  
-  // Create temp directory structure
-  mkdirSync(tempDir, { recursive: true })
-  mkdirSync(join(tempDir, '.vitepress'), { recursive: true })
-  
-  // Copy markdown files to temp directory
-  cpSync(docsPath, tempDir, { 
-    recursive: true,
-    filter: (src) => {
-      // Don't copy node_modules, .git, or other build artifacts
-      const pathParts = src.split('/')
-      return !pathParts.some(part => ['node_modules', '.git', '.vitepress', 'dist', '.cache'].includes(part))
-    }
-  })
-  
-  // Generate missing index.md files
-  generateMissingIndexFiles(tempDir)
-  
-  // Copy theme files
-  const themeSrc = join(__dirname, '../vitepress/theme')
-  const themeDst = join(tempDir, '.vitepress/theme')
-  cpSync(themeSrc, themeDst, { recursive: true })
-  
-  // Generate and write VitePress config (files are in tempDir, no srcDir)
-  const configGeneratorUrl = pathToFileURL(join(__dirname, '../vitepress/configGenerator.js')).href
-  const configContent = `
-import { generateVitePressConfig } from '${configGeneratorUrl}'
+
+  try {
+    // Create temp directory structure
+    mkdirSync(tempDir, { recursive: true })
+    mkdirSync(join(tempDir, '.vitepress'), { recursive: true })
+
+    // Copy markdown files to temp directory
+    cpSync(docsPath, tempDir, {
+      recursive: true,
+      filter: (src) => !isExcludedPath(docsPath, src)
+    })
+
+    // Generate missing index.md files
+    generateMissingIndexFiles(tempDir)
+
+    // Copy theme files
+    const themeSrc = join(__dirname, '../vitepress/theme')
+    const themeDst = join(tempDir, '.vitepress/theme')
+    cpSync(themeSrc, themeDst, { recursive: true })
+
+    // Generate and write VitePress config (files are in tempDir, no srcDir)
+    const configGeneratorUrl = pathToFileURL(join(__dirname, '../vitepress/configGenerator.js')).href
+    const configContent = `
+import { generateVitePressConfig } from ${JSON.stringify(configGeneratorUrl)}
 
 const userConfig = ${JSON.stringify(config, null, 2)}
-const docsPath = '${tempDir.replace(/\\/g, '\\\\')}'
+const docsPath = ${JSON.stringify(tempDir)}
 
 export default generateVitePressConfig(userConfig, docsPath, false)
 `
-  
-  writeFileSync(join(tempDir, '.vitepress/config.mjs'), configContent)
-  
-  // Create minimal package.json for VitePress
-  const packageJson = {
-    name: 'fastdocs-temp',
-    type: 'module',
-    private: true,
-    dependencies: {
-      vitepress: '^1.6.4',
-      'gray-matter': '^4.0.3',
-      chokidar: '^4.0.3',
-      vue: '^3.5.13',
-      '@vue/devtools-api': '^7.6.4',
-      '@vueuse/core': '^11.3.0',
-      '@vueuse/integrations': '^11.3.0',
-      'mark.js': '^8.11.1',
-      'minisearch': '^7.1.0',
-      'lucide-vue-next': '^0.468.0',
-      'mermaid': '^11.4.0'
+
+    writeFileSync(join(tempDir, '.vitepress/config.mjs'), configContent)
+
+    // Create minimal package.json for VitePress
+    const packageJson = {
+      name: 'fastdocs-temp',
+      type: 'module',
+      private: true
     }
+
+    writeFileSync(join(tempDir, 'package.json'), JSON.stringify(packageJson, null, 2))
+
+    linkRuntimeDependencies(tempDir)
+
+    return tempDir
+  } catch (err) {
+    cleanupTempProject(tempDir)
+    throw err
   }
-  
-  writeFileSync(join(tempDir, 'package.json'), JSON.stringify(packageJson, null, 2))
-  
-  return tempDir
 }
 
 /**
@@ -137,68 +129,7 @@ export default generateVitePressConfig(userConfig, docsPath, false)
  * @returns {string} Path to temporary project directory
  */
 export function createTempProjectForBuild(docsPath, config) {
-  const hash = randomBytes(8).toString('hex')
-  const tempDir = join(tmpdir(), `fastdocs-${hash}`)
-  
-  // Create temp directory structure
-  mkdirSync(tempDir, { recursive: true })
-  mkdirSync(join(tempDir, '.vitepress'), { recursive: true })
-  
-  // Copy markdown files to temp directory (fixes Vue module resolution for build)
-  cpSync(docsPath, tempDir, { 
-    recursive: true,
-    filter: (src) => {
-      // Don't copy node_modules, .git, or other build artifacts
-      // Check if any part of the path contains these directories
-      const pathParts = src.split('/')
-      return !pathParts.some(part => ['node_modules', '.git', '.vitepress', 'dist', '.cache'].includes(part))
-    }
-  })
-  
-  // Generate missing index.md files
-  generateMissingIndexFiles(tempDir)
-  
-  // Copy theme files
-  const themeSrc = join(__dirname, '../vitepress/theme')
-  const themeDst = join(tempDir, '.vitepress/theme')
-  cpSync(themeSrc, themeDst, { recursive: true })
-  
-  // Generate and write VitePress config (files are in tempDir, no srcDir)
-  const configGeneratorUrl = pathToFileURL(join(__dirname, '../vitepress/configGenerator.js')).href
-  const configContent = `
-import { generateVitePressConfig } from '${configGeneratorUrl}'
-
-const userConfig = ${JSON.stringify(config, null, 2)}
-const docsPath = '${tempDir.replace(/\\/g, '\\\\')}'
-
-export default generateVitePressConfig(userConfig, docsPath, false)
-`
-  
-  writeFileSync(join(tempDir, '.vitepress/config.mjs'), configContent)
-  
-  // Create minimal package.json for VitePress
-  const packageJson = {
-    name: 'fastdocs-temp',
-    type: 'module',
-    private: true,
-    dependencies: {
-      vitepress: '^1.6.4',
-      'gray-matter': '^4.0.3',
-      chokidar: '^4.0.3',
-      vue: '^3.5.13',
-      '@vue/devtools-api': '^7.6.4',
-      '@vueuse/core': '^11.3.0',
-      '@vueuse/integrations': '^11.3.0',
-      'mark.js': '^8.11.1',
-      'minisearch': '^7.1.0',
-      'lucide-vue-next': '^0.468.0',
-      'mermaid': '^11.4.0'
-    }
-  }
-  
-  writeFileSync(join(tempDir, 'package.json'), JSON.stringify(packageJson, null, 2))
-  
-  return tempDir
+  return createTempProject(docsPath, config)
 }
 
 /**

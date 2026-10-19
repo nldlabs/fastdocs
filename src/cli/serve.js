@@ -1,5 +1,6 @@
+import { hasMarkdownFiles } from '../utils/docsFiles.js'
 import { resolve, isAbsolute } from 'path'
-import { existsSync, statSync, readdirSync } from 'fs'
+import { existsSync, statSync } from 'fs'
 import { spawn } from 'child_process'
 import { loadConfig } from './config.js'
 import { createTempProject, registerCleanupHandlers } from '../utils/tempProject.js'
@@ -9,6 +10,14 @@ import { checkLinks } from '../utils/linkChecker.js'
 import pc from 'picocolors'
 
 export async function serve(docsPath = '.', options = {}) {
+  const startedAt = performance.now()
+  let phaseStartedAt = startedAt
+  const timings = []
+  const markPhase = (name) => {
+    const now = performance.now()
+    timings.push(`${name}: ${(now - phaseStartedAt).toFixed(0)}ms`)
+    phaseStartedAt = now
+  }
   // Resolve absolute path
   const absoluteDocsPath = isAbsolute(docsPath) ? docsPath : resolve(process.cwd(), docsPath)
   
@@ -24,8 +33,7 @@ export async function serve(docsPath = '.', options = {}) {
   }
   
   // Check for at least one markdown file
-  const hasMarkdown = readdirSync(absoluteDocsPath, { recursive: true })
-    .some(file => file.toString().endsWith('.md'))
+  const hasMarkdown = hasMarkdownFiles(absoluteDocsPath)
   
   if (!hasMarkdown) {
     error('No markdown files found in directory')
@@ -39,28 +47,15 @@ export async function serve(docsPath = '.', options = {}) {
   console.log(pc.cyan(pc.bold('📖  Fast Docs')))
   console.log()
   
+  markPhase('validate/config')
+
   // Create temporary VitePress project
   const tempDir = createTempProject(absoluteDocsPath, config)
   
+  markPhase('prepare project/runtime')
+
   // Register cleanup handlers
   registerCleanupHandlers(tempDir)
-  
-  // Install dependencies in temp directory
-  process.stdout.write(pc.dim('⚙  Setting up...'))
-  const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
-  await new Promise((resolve, reject) => {
-    const npm = spawn(`${npmCmd} install`, {
-      cwd: tempDir,
-      stdio: 'pipe',  // Hide npm output
-      shell: true
-    })
-    
-    npm.on('close', (code) => {
-      process.stdout.write('\r\x1b[K') // Clear line
-      if (code === 0) resolve()
-      else reject(new Error(`Setup failed`))
-    })
-  })
   
   process.stdout.write(pc.dim('🚀 Starting server...'))
   
@@ -152,9 +147,13 @@ export async function serve(docsPath = '.', options = {}) {
         // Show our custom ready message when VitePress is ready
         if (!hasShownTips && output.includes('Local:')) {
           hasShownTips = true
+          markPhase('VitePress ready')
           process.stdout.write('\r\x1b[K') // Clear "Starting server..." line
           
           console.log(pc.green('✓') + pc.bold(' Server ready!'))
+          if (options.timings) {
+            console.log(pc.dim(`Startup ${Math.round(performance.now() - startedAt)}ms (${timings.join(', ')})`))
+          }
           console.log()
           console.log(pc.dim('─'.repeat(60)))
           console.log()

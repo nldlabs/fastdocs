@@ -1,3 +1,4 @@
+import { isExcludedPath } from './docsFiles.js'
 import { watch } from 'chokidar'
 import { writeFileSync, cpSync, rmSync, mkdirSync, existsSync, unlinkSync } from 'fs'
 import { join, dirname, relative } from 'path'
@@ -18,7 +19,8 @@ const __dirname = dirname(__filename)
 export function watchSidebarChanges(docsPath, tempDir, onRestart) {
   const watcher = watch(docsPath, {
     ignoreInitial: true,
-    ignored: ['**/node_modules/**', '**/.vitepress/**', '**/dist/**', '**/.git/**'],
+    // Chokidar 4 does not support globs. Never sync dependency trees into runtime links.
+    ignored: (path) => isExcludedPath(docsPath, path),
     depth: 99 // Watch all subdirectories
   })
   
@@ -96,10 +98,10 @@ export function watchSidebarChanges(docsPath, tempDir, onRestart) {
       // Write updated config (pointing to tempDir)
       const configPath = join(tempDir, '.vitepress/config.mjs')
       const configGeneratorUrl = pathToFileURL(join(__dirname, '../vitepress/configGenerator.js')).href
-      const configContent = `import { generateVitePressConfig } from '${configGeneratorUrl}'
+      const configContent = `import { generateVitePressConfig } from ${JSON.stringify(configGeneratorUrl)}
 
 const userConfig = ${JSON.stringify(config, null, 2)}
-const docsPath = '${tempDir.replace(/\\/g, '\\\\')}'
+const docsPath = ${JSON.stringify(tempDir)}
 
 export default generateVitePressConfig(userConfig, docsPath, false)
 `

@@ -23,6 +23,7 @@ program
   .option('-p, --port <number>', 'Port number', '5173')
   .option('--no-open', 'Do not open browser automatically')
   .option('--host', 'Allow external access')
+  .option('--timings', 'Show startup phase timings')
   .action(serve)
 
 program

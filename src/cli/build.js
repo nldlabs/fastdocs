@@ -1,5 +1,6 @@
+import { hasMarkdownFiles } from '../utils/docsFiles.js'
 import { resolve, isAbsolute, join } from 'path'
-import { existsSync, statSync, readdirSync, rmSync, cpSync } from 'fs'
+import { existsSync, statSync, rmSync, cpSync } from 'fs'
 import { spawn } from 'child_process'
 import { loadConfig } from './config.js'
 import { createTempProjectForBuild, cleanupTempProject } from '../utils/tempProject.js'
@@ -25,8 +26,7 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
   }
   
   // Check for at least one markdown file
-  const hasMarkdown = readdirSync(absoluteInputPath, { recursive: true })
-    .some(file => file.toString().endsWith('.md'))
+  const hasMarkdown = hasMarkdownFiles(absoluteInputPath)
   
   if (!hasMarkdown) {
     error('No markdown files found in directory')
@@ -118,23 +118,6 @@ export async function build(inputPath = '.', outputPath = './dist', options = {}
   const tempDir = createTempProjectForBuild(absoluteInputPath, config)
   
   try {
-    // Install dependencies
-    process.stdout.write(pc.dim('⚙  Setting up...'))
-    const npmCmd = process.platform === 'win32' ? 'npm.cmd' : 'npm'
-    await new Promise((resolve, reject) => {
-      const npm = spawn(`${npmCmd} install`, {
-        cwd: tempDir,
-        stdio: 'pipe',
-        shell: true
-      })
-      
-      npm.on('close', (code) => {
-        process.stdout.write('\r\x1b[K') // Clear line
-        if (code === 0) resolve()
-        else reject(new Error(`Setup failed`))
-      })
-    })
-    
     // Run VitePress build
     process.stdout.write(pc.dim('🔨 Building...'))
     

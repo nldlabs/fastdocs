@@ -308,3 +308,21 @@ MIT
 ## Credits
 
 Built on [VitePress](https://vitepress.dev) - the Vite & Vue powered static site generator.
+
+### Startup performance
+
+Fastdocs reuses the dependencies installed with the CLI. Starting a server or
+building a site does not run `npm install` or require registry access after
+Fastdocs itself has been installed. The initial `npm install` / `npx` download
+still needs to finish normally.
+
+Documentation and generated indexes remain in a separate temporary project for
+each invocation; your source directory and installed packages are not modified.
+Runtime packages are linked into that project (directory junctions on Windows).
+If a required dependency is missing, reinstall Fastdocs to repair the installation.
+
+Use `fastdocs serve ./docs --timings` to print validation/configuration,
+project/runtime preparation, and VitePress-ready timings. These measure CLI
+startup, not browser rendering or the initial package download.
+
+Run `npm test` for runtime isolation, cleanup, discovery, and HTTP serving tests.
